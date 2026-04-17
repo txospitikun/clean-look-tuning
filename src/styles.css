@@ -1291,6 +1291,11 @@ main {
   background-clip: text;
 }
 
+.cfg-perf-stage1 small {
+  -webkit-text-fill-color: transparent;
+  opacity: 1;
+}
+
 .cfg-perf-card-stage1 {
   border-color: rgba(92,242,214,0.2);
   background: linear-gradient(180deg, rgba(14,21,52,0.95), rgba(9,13,29,0.85));
