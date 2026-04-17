@@ -1,0 +1,26 @@
+{
+  "name": "clean-look-tuning-refresh",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server/index.js",
+    "server": "node server/index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.9.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.14.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.2",
+    "vite": "^5.4.10"
+  }
+}

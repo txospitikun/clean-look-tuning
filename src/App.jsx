@@ -1,0 +1,114 @@
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { BookingProvider } from "./components/BookingContext";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import MobileCTA from "./components/MobileCTA";
+import BookingModal from "./components/BookingModal";
+import Home from "./pages/Home";
+import Tuning from "./pages/Tuning";
+import Diagnoza from "./pages/Diagnoza";
+import DPF from "./pages/DPF";
+import EGR from "./pages/EGR";
+import Contact from "./pages/Contact";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import Contract from "./pages/Contract";
+import PaymentStatus from "./pages/PaymentStatus";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
+function RevealObserver() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const nodes = document.querySelectorAll("[data-reveal]:not(.is-visible)");
+      if (!nodes.length) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+      );
+
+      nodes.forEach((n) => observer.observe(n));
+      return () => observer.disconnect();
+    }, 60);
+
+    return () => clearTimeout(timer);
+  }, [pathname]);
+
+  return null;
+}
+
+/* Mouse-tracking glow on cards */
+function CardGlow() {
+  useEffect(() => {
+    const handler = (e) => {
+      const cards = document.querySelectorAll(
+        ".service-card, .trust-card, .benefit-card, .stage-card"
+      );
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+        card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+      });
+    };
+    document.addEventListener("mousemove", handler, { passive: true });
+    return () => document.removeEventListener("mousemove", handler);
+  }, []);
+  return null;
+}
+
+function Layout() {
+  return (
+    <>
+      <ScrollToTop />
+      <RevealObserver />
+      <CardGlow />
+      <Header />
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/tuning" element={<Tuning />} />
+          <Route path="/diagnoza" element={<Diagnoza />} />
+          <Route path="/dpf" element={<DPF />} />
+          <Route path="/egr" element={<EGR />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/termeni" element={<Terms />} />
+          <Route path="/confidentialitate" element={<Privacy />} />
+          <Route path="/contract" element={<Contract />} />
+          <Route path="/plata/:status" element={<PaymentStatus />} />
+        </Routes>
+      </main>
+      <Footer />
+      <MobileCTA />
+      <BookingModal />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <BookingProvider>
+        <div className="app-shell">
+          <Layout />
+        </div>
+      </BookingProvider>
+    </BrowserRouter>
+  );
+}
