@@ -92,7 +92,7 @@ export default function VehicleDetail() {
               className="cfg-car-image"
               src={getCarImageUrl(brand.name, model.modelFamily || model.name)}
               alt={`${brand.name} ${model.name}`}
-              onError={(e) => { e.target.onerror = null; e.target.style.opacity = '0.3'; }}
+              onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }}
             />
           </div>
         </div>

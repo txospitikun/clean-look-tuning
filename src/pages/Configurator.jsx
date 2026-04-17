@@ -53,6 +53,8 @@ export default function Configurator() {
       .then((data) => {
         setEngines(data.engines || []);
         setModelFamily(data.modelFamily || '');
+        // Also set brandName from engines response in case models fetch hasn't returned yet
+        if (data.brand) setBrandName(data.brand);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -228,17 +230,16 @@ export default function Configurator() {
           </div>
 
           {/* Car image */}
-          <div className="cfg-car-image-wrap">
-            <img
-              className="cfg-car-image"
-              src={brandName && modelFamily
-                ? getCarImageUrl(brandName, modelFamily)
-                : 'https://cdn.imagin.studio/getimage?customer=img&make=Volkswagen&modelFamily=Golf&paintId=pspc0040&angle=23&width=800'
-              }
-              alt={`${brandName || 'Auto'} ${modelObj?.name || ''}`}
-              onError={(e) => { e.target.onerror = null; e.target.style.opacity = '0.3'; }}
-            />
-          </div>
+          {brandName && modelFamily && (
+            <div className="cfg-car-image-wrap">
+              <img
+                className="cfg-car-image"
+                src={getCarImageUrl(brandName, modelFamily)}
+                alt={`${brandName} ${modelObj?.name || ''}`}
+                onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }}
+              />
+            </div>
+          )}
 
           {visibleDiesel.length > 0 && (
             <>
