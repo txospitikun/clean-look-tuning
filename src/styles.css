@@ -1153,6 +1153,12 @@ main {
   font-size: 1.05rem; font-weight: 800; color: var(--text);
 }
 
+/* ─── Show more ─── */
+.cfg-show-more {
+  display: flex; justify-content: center;
+  margin-top: 20px;
+}
+
 /* ═══════════════════════════════════════════
    CONFIGURATOR — VEHICLE DETAIL PAGE
    ═══════════════════════════════════════════ */

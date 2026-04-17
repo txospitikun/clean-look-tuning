@@ -63,8 +63,22 @@ export default function Configurator() {
   const brandObj = brands.find((b) => b.slug === selectedBrand);
   const modelObj = models.find((m) => m.slug === selectedModel);
 
+  const [visibleCount, setVisibleCount] = useState(8);
+
+  // Reset visible count when engines change
+  useEffect(() => {
+    setVisibleCount(8);
+  }, [engines]);
+
   const dieselEngines = engines.filter((e) => e.fuel === 'Diesel');
   const petrolEngines = engines.filter((e) => e.fuel === 'Benzina');
+
+  // Paginate: interleave diesel first, then petrol, cap at visibleCount
+  const allOrdered = [...dieselEngines, ...petrolEngines];
+  const hasMore = allOrdered.length > visibleCount;
+  const visibleDiesel = dieselEngines.slice(0, Math.max(0, visibleCount));
+  const remainingSlots = visibleCount - visibleDiesel.length;
+  const visiblePetrol = petrolEngines.slice(0, Math.max(0, remainingSlots));
 
   return (
     <>
@@ -167,11 +181,11 @@ export default function Configurator() {
             </p>
           </div>
 
-          {dieselEngines.length > 0 && (
+          {visibleDiesel.length > 0 && (
             <>
               <h3 className="cfg-fuel-heading">Diesel</h3>
               <div className="cfg-engine-grid">
-                {dieselEngines.map((eng) => (
+                {visibleDiesel.map((eng) => (
                   <EngineCard
                     key={eng.slug}
                     engine={eng}
@@ -183,11 +197,11 @@ export default function Configurator() {
             </>
           )}
 
-          {petrolEngines.length > 0 && (
+          {visiblePetrol.length > 0 && (
             <>
               <h3 className="cfg-fuel-heading">Benzina</h3>
               <div className="cfg-engine-grid">
-                {petrolEngines.map((eng) => (
+                {visiblePetrol.map((eng) => (
                   <EngineCard
                     key={eng.slug}
                     engine={eng}
@@ -197,6 +211,18 @@ export default function Configurator() {
                 ))}
               </div>
             </>
+          )}
+
+          {hasMore && (
+            <div className="cfg-show-more">
+              <button
+                type="button"
+                className="btn btn-secondary btn-lg"
+                onClick={() => setVisibleCount((c) => c + 8)}
+              >
+                Arata mai multe ({allOrdered.length - visibleCount} ramase)
+              </button>
+            </div>
           )}
         </section>
       )}
