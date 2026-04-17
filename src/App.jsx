@@ -30,27 +30,35 @@ function RevealObserver() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+    );
+
+    function observeNew() {
       const nodes = document.querySelectorAll("[data-reveal]:not(.is-visible)");
-      if (!nodes.length) return;
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
-      );
-
       nodes.forEach((n) => observer.observe(n));
-      return () => observer.disconnect();
-    }, 60);
+    }
 
-    return () => clearTimeout(timer);
+    // Initial pass
+    const timer = setTimeout(observeNew, 60);
+
+    // Watch for dynamically added data-reveal nodes
+    const mutation = new MutationObserver(observeNew);
+    mutation.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      clearTimeout(timer);
+      mutation.disconnect();
+      observer.disconnect();
+    };
   }, [pathname]);
 
   return null;

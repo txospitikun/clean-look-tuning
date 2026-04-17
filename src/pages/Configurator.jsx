@@ -76,16 +76,29 @@ export default function Configurator() {
   const modelObj = models.find((m) => m.slug === selectedModel);
 
   const [visibleCount, setVisibleCount] = useState(8);
+  const [engineFilter, setEngineFilter] = useState('');
 
-  // Reset visible count when engines change
+  // Reset visible count and filter when engines change
   useEffect(() => {
     setVisibleCount(8);
+    setEngineFilter('');
   }, [engines]);
 
-  const dieselEngines = engines.filter((e) => e.fuel === 'Diesel');
-  const petrolEngines = engines.filter((e) => e.fuel === 'Benzina');
+  // Filter engines by search term
+  const filterLower = engineFilter.toLowerCase().trim();
+  const filteredEngines = filterLower
+    ? engines.filter((e) =>
+        e.name.toLowerCase().includes(filterLower) ||
+        e.fuel.toLowerCase().includes(filterLower) ||
+        e.ecu.toLowerCase().includes(filterLower) ||
+        String(e.hp).includes(filterLower)
+      )
+    : engines;
 
-  // Paginate: interleave diesel first, then petrol, cap at visibleCount
+  const dieselEngines = filteredEngines.filter((e) => e.fuel === 'Diesel');
+  const petrolEngines = filteredEngines.filter((e) => e.fuel === 'Benzina');
+
+  // Paginate: diesel first, then petrol, cap at visibleCount
   const allOrdered = [...dieselEngines, ...petrolEngines];
   const hasMore = allOrdered.length > visibleCount;
   const visibleDiesel = dieselEngines.slice(0, Math.max(0, visibleCount));
@@ -142,9 +155,24 @@ export default function Configurator() {
           <div className="cfg-field cfg-field-info">
             {loading && <span className="cfg-loading">Se incarca...</span>}
             {!loading && selectedModel && engines.length > 0 && (
-              <span className="cfg-count">
-                {engines.length} motorizari disponibile
-              </span>
+              <div className="cfg-filter-wrap">
+                <span className="cfg-filter-label">
+                  {filterLower && filteredEngines.length !== engines.length
+                    ? `${filteredEngines.length} din ${engines.length} motorizari`
+                    : `${engines.length} motorizari disponibile`
+                  }
+                </span>
+                <input
+                  type="text"
+                  className="cfg-filter-input"
+                  placeholder="Cauta motor, CP, ECU..."
+                  value={engineFilter}
+                  onChange={(e) => {
+                    setEngineFilter(e.target.value);
+                    setVisibleCount(8);
+                  }}
+                />
+              </div>
             )}
             {!loading && !selectedBrand && (
               <span className="cfg-hint">Selecteaza marca pentru a incepe</span>
@@ -264,6 +292,23 @@ export default function Configurator() {
         <section className="section" data-reveal>
           <div className="cfg-empty card">
             <p>Nu am gasit motorizari pentru aceasta selectie.</p>
+          </div>
+        </section>
+      )}
+
+      {/* NO FILTER RESULTS */}
+      {!loading && selectedModel && engines.length > 0 && filteredEngines.length === 0 && (
+        <section className="section" data-reveal>
+          <div className="cfg-empty card">
+            <p>Nicio motorizare nu corespunde cautarii &ldquo;{engineFilter}&rdquo;.</p>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              style={{ marginTop: '12px' }}
+              onClick={() => setEngineFilter('')}
+            >
+              Reseteaza cautarea
+            </button>
           </div>
         </section>
       )}

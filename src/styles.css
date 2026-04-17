@@ -1011,6 +1011,33 @@ main {
 .cfg-count { color: var(--cyan); font-weight: 700; font-size: 0.88rem; }
 .cfg-hint { color: var(--muted); font-size: 0.84rem; }
 
+/* ─── Engine filter / search ─── */
+.cfg-filter-wrap {
+  display: flex; flex-direction: column; gap: 4px; width: 100%;
+}
+.cfg-filter-label {
+  font-size: 0.78rem; font-weight: 600; color: var(--cyan);
+}
+.cfg-filter-input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.88rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.cfg-filter-input::placeholder {
+  color: var(--muted);
+}
+.cfg-filter-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(124,156,255,0.15);
+}
+
 /* ═══════════════════════════════════════════
    CONFIGURATOR — BRAND GRID
    ═══════════════════════════════════════════ */
