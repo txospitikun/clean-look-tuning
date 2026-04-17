@@ -98,12 +98,19 @@ export default function Home() {
           </p>
 
           <div className="hero-actions">
-            <button type="button" className="btn btn-primary btn-lg" onClick={() => open()}>
+            <a
+              className="btn btn-primary btn-lg"
+              href="#configurator"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('configurator')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Către configurator
+            </a>
+            <button type="button" className="btn btn-secondary btn-lg" onClick={() => open()}>
               Programează-te acum
             </button>
-            <a className="btn btn-secondary btn-lg" href="tel:+40754301560">
-              Sună: 0754 301 560
-            </a>
           </div>
         </div>
 
@@ -147,7 +154,7 @@ export default function Home() {
       </section>
 
       {/* CONFIGURATOR SEARCH — prominent, right after hero */}
-      <section className="section" data-reveal>
+      <section className="section" id="configurator" data-reveal>
         <div className="section-heading">
           <span className="eyebrow">Configurator</span>
           <h2>Cauta specificatiile masinii tale.</h2>
