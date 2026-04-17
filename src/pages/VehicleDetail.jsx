@@ -87,16 +87,14 @@ export default function VehicleDetail() {
               <span className="gradient-text">{engine.name}</span>
             </h1>
           </div>
-          {model.modelFamily && (
-            <div className="cfg-vehicle-hero-image">
-              <img
-                className="cfg-car-image"
-                src={getCarImageUrl(brand.name, model.modelFamily)}
-                alt={`${brand.name} ${model.name}`}
-                onError={handleImageError}
-              />
-            </div>
-          )}
+          <div className="cfg-vehicle-hero-image">
+            <img
+              className="cfg-car-image"
+              src={getCarImageUrl(brand.name, model.modelFamily || model.name)}
+              alt={`${brand.name} ${model.name}`}
+              onError={(e) => { e.target.onerror = null; e.target.style.opacity = '0.3'; }}
+            />
+          </div>
         </div>
       </section>
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useBooking } from "../components/BookingContext";
+import { getBrandLogoUrl, handleImageError } from "../utils/carImages";
 
 const SERVICES = [
   {
@@ -230,7 +231,14 @@ export default function Home() {
           <div className="home-cfg-fields">
             <div className="cfg-field">
               <span>Marca</span>
-              <select value={selBrand} onChange={(e) => setSelBrand(e.target.value)}>
+              <select
+                value={selBrand}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSelBrand(val);
+                  if (val) navigate(`/configurator?marca=${val}`);
+                }}
+              >
                 <option value="">Alege marca</option>
                 {brands.map((b) => (
                   <option key={b.slug} value={b.slug}>{b.name}</option>
@@ -241,7 +249,11 @@ export default function Home() {
               <span>Model</span>
               <select
                 value={selModel}
-                onChange={(e) => setSelModel(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSelModel(val);
+                  if (val && selBrand) navigate(`/configurator?marca=${selBrand}&model=${val}`);
+                }}
                 disabled={!selBrand}
               >
                 <option value="">Alege modelul</option>
@@ -261,6 +273,27 @@ export default function Home() {
             Cauta
           </button>
         </div>
+
+        {/* Brand grid - quick access */}
+        {brands.length > 0 && (
+          <div className="cfg-brand-grid home-brand-grid" style={{ marginTop: '20px' }}>
+            {brands.slice(0, 12).map((b) => (
+              <Link
+                key={b.slug}
+                to={`/configurator?marca=${b.slug}`}
+                className="cfg-brand-card card"
+              >
+                <img
+                  className="cfg-brand-logo"
+                  src={getBrandLogoUrl(b.slug)}
+                  alt={b.name}
+                  onError={handleImageError}
+                />
+                <span className="cfg-brand-name">{b.name}</span>
+              </Link>
+            ))}
+          </div>
+        )}
 
         <div className="home-cfg-link">
           <Link to="/configurator" className="card-link">
