@@ -105,24 +105,6 @@ export default function Home() {
               Sună: 0754 301 560
             </a>
           </div>
-
-          <div className="hero-stat-grid" data-reveal>
-            <article className="stat-card card">
-              <strong>25-35%</strong>
-              <span>potențial extra pe motoare turbo*</span>
-            </article>
-            <article className="stat-card card">
-              <strong>8-12%</strong>
-              <span>potențial extra pe aspirate*</span>
-            </article>
-            <article className="stat-card card">
-              <strong>15%</strong>
-              <span>economie posibilă Eco Tuning</span>
-            </article>
-          </div>
-          <p className="hero-footnote">
-            * Valorile depind de motor, stare tehnică și mod de exploatare.
-          </p>
         </div>
 
         <div className="hero-visual" data-reveal>
@@ -164,59 +146,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SERVICES */}
-      <section className="section" data-reveal>
-        <div className="section-heading">
-          <span className="eyebrow">Servicii</span>
-          <h2>Tot ce ai nevoie, într-un singur atelier.</h2>
-          <p>
-            De la chip tuning custom la diagnoză profesionistă, filtre de particule și circuitul EGR
-            — fiecare serviciu cu abordare clară și rezultat măsurabil.
-          </p>
-        </div>
-
-        <div className="service-grid">
-          {SERVICES.map((svc) => (
-            <Link
-              to={svc.to}
-              className="service-card card"
-              key={svc.title}
-              data-reveal
-              style={{ "--accent": svc.accent }}
-            >
-              <div className="service-media">
-                <img src={svc.image} alt={svc.title} loading="lazy" />
-              </div>
-              <div className="service-body">
-                <span className="service-tag">{svc.tag}</span>
-                <h3>{svc.title}</h3>
-                <p>{svc.copy}</p>
-                <span className="card-link">Află mai mult &rarr;</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* TRUST */}
-      <section className="section" data-reveal>
-        <div className="section-heading">
-          <span className="eyebrow">De ce CLT</span>
-          <h2>Experiență, echipament profesional, contact direct.</h2>
-        </div>
-
-        <div className="trust-grid">
-          {TRUST.map((t) => (
-            <article className="trust-card card" key={t.title} data-reveal>
-              <strong>{t.value}</strong>
-              <h3>{t.title}</h3>
-              <p>{t.copy}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* CONFIGURATOR SEARCH */}
+      {/* CONFIGURATOR SEARCH — prominent, right after hero */}
       <section className="section" data-reveal>
         <div className="section-heading">
           <span className="eyebrow">Configurator</span>
@@ -299,6 +229,79 @@ export default function Home() {
           <Link to="/configurator" className="card-link">
             Vezi toate marcile si modelele &rarr;
           </Link>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section className="section" data-reveal>
+        <div className="hero-stat-grid">
+          <article className="stat-card card">
+            <strong>25-35%</strong>
+            <span>potențial extra pe motoare turbo*</span>
+          </article>
+          <article className="stat-card card">
+            <strong>8-12%</strong>
+            <span>potențial extra pe aspirate*</span>
+          </article>
+          <article className="stat-card card">
+            <strong>15%</strong>
+            <span>economie posibilă Eco Tuning</span>
+          </article>
+        </div>
+        <p className="hero-footnote">
+          * Valorile depind de motor, stare tehnică și mod de exploatare.
+        </p>
+      </section>
+
+      {/* SERVICES */}
+      <section className="section" data-reveal>
+        <div className="section-heading">
+          <span className="eyebrow">Servicii</span>
+          <h2>Tot ce ai nevoie, într-un singur atelier.</h2>
+          <p>
+            De la chip tuning custom la diagnoză profesionistă, filtre de particule și circuitul EGR
+            — fiecare serviciu cu abordare clară și rezultat măsurabil.
+          </p>
+        </div>
+
+        <div className="service-grid">
+          {SERVICES.map((svc) => (
+            <Link
+              to={svc.to}
+              className="service-card card"
+              key={svc.title}
+              data-reveal
+              style={{ "--accent": svc.accent }}
+            >
+              <div className="service-media">
+                <img src={svc.image} alt={svc.title} loading="lazy" />
+              </div>
+              <div className="service-body">
+                <span className="service-tag">{svc.tag}</span>
+                <h3>{svc.title}</h3>
+                <p>{svc.copy}</p>
+                <span className="card-link">Află mai mult &rarr;</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* TRUST */}
+      <section className="section" data-reveal>
+        <div className="section-heading">
+          <span className="eyebrow">De ce CLT</span>
+          <h2>Experiență, echipament profesional, contact direct.</h2>
+        </div>
+
+        <div className="trust-grid">
+          {TRUST.map((t) => (
+            <article className="trust-card card" key={t.title} data-reveal>
+              <strong>{t.value}</strong>
+              <h3>{t.title}</h3>
+              <p>{t.copy}</p>
+            </article>
+          ))}
         </div>
       </section>
 
