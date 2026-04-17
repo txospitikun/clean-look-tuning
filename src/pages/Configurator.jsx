@@ -203,7 +203,6 @@ export default function Configurator() {
                   className="cfg-brand-logo"
                   src={getBrandLogoUrl(b.slug)}
                   alt={b.name}
-                  loading="lazy"
                   onError={handleImageError}
                 />
                 <span className="cfg-brand-name">{b.name}</span>
@@ -235,7 +234,6 @@ export default function Configurator() {
                 className="cfg-car-image"
                 src={getCarImageUrl(brandName, modelFamily)}
                 alt={`${brandName} ${modelObj?.name || ''}`}
-                loading="lazy"
                 onError={handleImageError}
               />
             </div>

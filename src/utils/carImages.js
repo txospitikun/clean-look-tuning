@@ -29,7 +29,7 @@ export function getCarImageUrl(make, modelFamily) {
     customer: 'img',
     make,
     modelFamily,
-    paintId: 'pspc0020',
+    paintId: 'pspc0040',
     angle: '23',
     width: '800',
   });
@@ -38,10 +38,9 @@ export function getCarImageUrl(make, modelFamily) {
 
 /**
  * Fallback handler for broken images.
- * Sets a neutral SVG placeholder on error.
+ * Hides the image element on error.
  */
 export function handleImageError(e) {
   e.target.onerror = null;
-  e.target.src =
-    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' fill='none'%3E%3Crect width='400' height='300' rx='12' fill='%23181c2a'/%3E%3Ctext x='200' y='160' text-anchor='middle' fill='%23555' font-size='14' font-family='sans-serif'%3EImagine indisponibila%3C/text%3E%3C/svg%3E";
+  e.target.style.display = 'none';
 }

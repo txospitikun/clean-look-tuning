@@ -1100,12 +1100,15 @@ main {
   display: flex; justify-content: center; align-items: center;
   margin: 0 auto 24px;
   max-width: 520px;
+  min-height: 120px;
+  background: radial-gradient(ellipse at center bottom, rgba(124,156,255,0.06) 0%, transparent 70%);
+  border-radius: 12px;
 }
 .cfg-car-image {
   width: 100%; max-width: 520px; height: auto;
   object-fit: contain;
   border-radius: 8px;
-  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.35));
+  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.5));
 }
 
 /* ═══════════════════════════════════════════
