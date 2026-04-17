@@ -173,7 +173,7 @@ app.get("/api/configurator/brands/:brandSlug/models", (req, res) => {
     name: m.name,
     slug: m.slug,
     years: m.years,
-    image: m.image,
+    modelFamily: m.modelFamily,
     engineCount: m.engines.length,
   }));
   res.json({ brand: brand.name, brandSlug: brand.slug, models });
@@ -203,8 +203,8 @@ app.get("/api/configurator/brands/:brandSlug/models/:modelSlug/engines", (req, r
     brandSlug: brand.slug,
     model: model.name,
     modelSlug: model.slug,
+    modelFamily: model.modelFamily,
     years: model.years,
-    image: model.image,
     engines,
   });
 });
@@ -221,8 +221,8 @@ app.get("/api/configurator/vehicle/:brandSlug/:modelSlug/:engineSlug", (req, res
   if (!engine) return res.status(404).json({ error: "Motorizarea nu a fost gasita." });
 
   res.json({
-    brand: { name: brand.name, slug: brand.slug, logo: brand.logo },
-    model: { name: model.name, slug: model.slug, years: model.years, image: model.image },
+    brand: { name: brand.name, slug: brand.slug },
+    model: { name: model.name, slug: model.slug, years: model.years, modelFamily: model.modelFamily },
     engine,
   });
 });

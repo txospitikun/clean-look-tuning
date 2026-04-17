@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { getBrandLogoUrl, getCarImageUrl, handleImageError } from '../utils/carImages';
 
 const API = '/api/configurator';
 
@@ -9,6 +10,8 @@ export default function Configurator() {
   const [models, setModels] = useState([]);
   const [engines, setEngines] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [brandName, setBrandName] = useState('');
+  const [modelFamily, setModelFamily] = useState('');
 
   const selectedBrand = searchParams.get('marca') || '';
   const selectedModel = searchParams.get('model') || '';
@@ -25,11 +28,16 @@ export default function Configurator() {
   useEffect(() => {
     setModels([]);
     setEngines([]);
+    setBrandName('');
+    setModelFamily('');
     if (!selectedBrand) return;
     setLoading(true);
     fetch(`${API}/brands/${selectedBrand}/models`)
       .then((r) => r.json())
-      .then((data) => setModels(data.models || []))
+      .then((data) => {
+        setModels(data.models || []);
+        setBrandName(data.brand || '');
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [selectedBrand]);
@@ -37,11 +45,15 @@ export default function Configurator() {
   // Fetch engines when model changes
   useEffect(() => {
     setEngines([]);
+    setModelFamily('');
     if (!selectedBrand || !selectedModel) return;
     setLoading(true);
     fetch(`${API}/brands/${selectedBrand}/models/${selectedModel}/engines`)
       .then((r) => r.json())
-      .then((data) => setEngines(data.engines || []))
+      .then((data) => {
+        setEngines(data.engines || []);
+        setModelFamily(data.modelFamily || '');
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [selectedBrand, selectedModel]);
@@ -159,6 +171,13 @@ export default function Configurator() {
                 className="cfg-brand-card card"
                 onClick={() => setSearchParams({ marca: b.slug })}
               >
+                <img
+                  className="cfg-brand-logo"
+                  src={getBrandLogoUrl(b.slug)}
+                  alt={b.name}
+                  loading="lazy"
+                  onError={handleImageError}
+                />
                 <span className="cfg-brand-name">{b.name}</span>
                 <span className="cfg-brand-count">{b.modelCount} modele</span>
               </button>
@@ -180,6 +199,19 @@ export default function Configurator() {
               starea tehnica a vehiculului.
             </p>
           </div>
+
+          {/* Car image */}
+          {brandName && modelFamily && (
+            <div className="cfg-car-image-wrap">
+              <img
+                className="cfg-car-image"
+                src={getCarImageUrl(brandName, modelFamily)}
+                alt={`${brandName} ${modelObj?.name || ''}`}
+                loading="lazy"
+                onError={handleImageError}
+              />
+            </div>
+          )}
 
           {visibleDiesel.length > 0 && (
             <>

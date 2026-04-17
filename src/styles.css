@@ -1054,6 +1054,33 @@ main {
   font-size: 0.76rem; color: var(--muted);
 }
 
+/* ─── Brand logo in cards ─── */
+.cfg-brand-logo {
+  width: 48px; height: 48px;
+  object-fit: contain;
+  margin-bottom: 4px;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+  transition: opacity 200ms ease, filter 200ms ease;
+}
+.cfg-brand-card:hover .cfg-brand-logo {
+  opacity: 1;
+  filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(124,156,255,0.4));
+}
+
+/* ─── Car image (configurator results) ─── */
+.cfg-car-image-wrap {
+  display: flex; justify-content: center; align-items: center;
+  margin: 0 auto 24px;
+  max-width: 520px;
+}
+.cfg-car-image {
+  width: 100%; max-width: 520px; height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.35));
+}
+
 /* ═══════════════════════════════════════════
    CONFIGURATOR — ENGINE GRID + CARDS
    ═══════════════════════════════════════════ */
@@ -1179,10 +1206,29 @@ main {
 
 .cfg-vehicle-hero { padding-bottom: 12px; }
 
+.cfg-vehicle-hero-inner {
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+.cfg-vehicle-brand-logo {
+  width: 40px; height: 40px; object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
 .cfg-vehicle-title h1 {
   margin: 12px 0 0;
   font-size: clamp(1.8rem, 6vw, 3.4rem);
   line-height: 1.02; letter-spacing: -0.03em;
+}
+
+.cfg-vehicle-hero-image {
+  display: flex; justify-content: center;
+  max-width: 600px; margin: 0 auto;
+}
+.cfg-vehicle-hero-image .cfg-car-image {
+  max-width: 100%; height: auto;
 }
 
 /* ─── Performance grid ─── */
@@ -1759,6 +1805,14 @@ main {
   .locations-grid { grid-template-columns: repeat(3, 1fr); }
   .cfg-brand-grid { grid-template-columns: repeat(4, 1fr); }
   .cfg-engine-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .cfg-vehicle-hero-inner {
+    flex-direction: row; align-items: center; gap: 32px;
+  }
+  .cfg-vehicle-title { flex: 1 1 50%; min-width: 0; }
+  .cfg-vehicle-hero-image { flex: 1 1 48%; min-width: 0; }
+
+  .cfg-brand-logo { width: 56px; height: 56px; }
 
   .cfg-search-bar {
     flex-direction: row; align-items: flex-end;

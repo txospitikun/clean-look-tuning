@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useBooking } from '../components/BookingContext';
+import { getBrandLogoUrl, getCarImageUrl, handleImageError } from '../utils/carImages';
 
 const API = '/api/configurator';
 
@@ -71,13 +72,31 @@ export default function VehicleDetail() {
 
       {/* VEHICLE HEADER */}
       <section className="section cfg-vehicle-hero" data-reveal>
-        <div className="cfg-vehicle-title">
-          <span className="eyebrow">{engine.fuel} &bull; {model.years}</span>
-          <h1>
-            {brand.name} {model.name}
-            <br />
-            <span className="gradient-text">{engine.name}</span>
-          </h1>
+        <div className="cfg-vehicle-hero-inner">
+          <div className="cfg-vehicle-title">
+            <img
+              className="cfg-vehicle-brand-logo"
+              src={getBrandLogoUrl(brand.slug)}
+              alt={brand.name}
+              onError={handleImageError}
+            />
+            <span className="eyebrow">{engine.fuel} &bull; {model.years}</span>
+            <h1>
+              {brand.name} {model.name}
+              <br />
+              <span className="gradient-text">{engine.name}</span>
+            </h1>
+          </div>
+          {model.modelFamily && (
+            <div className="cfg-vehicle-hero-image">
+              <img
+                className="cfg-car-image"
+                src={getCarImageUrl(brand.name, model.modelFamily)}
+                alt={`${brand.name} ${model.name}`}
+                onError={handleImageError}
+              />
+            </div>
+          )}
         </div>
       </section>
 
