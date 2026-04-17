@@ -15,6 +15,8 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Contract from "./pages/Contract";
 import PaymentStatus from "./pages/PaymentStatus";
+import Configurator from "./pages/Configurator";
+import VehicleDetail from "./pages/VehicleDetail";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -59,7 +61,7 @@ function CardGlow() {
   useEffect(() => {
     const handler = (e) => {
       const cards = document.querySelectorAll(
-        ".service-card, .trust-card, .benefit-card, .stage-card"
+        ".service-card, .trust-card, .benefit-card, .stage-card, .cfg-engine-card, .cfg-brand-card"
       );
       cards.forEach((card) => {
         const rect = card.getBoundingClientRect();
@@ -87,6 +89,8 @@ function Layout() {
           <Route path="/diagnoza" element={<Diagnoza />} />
           <Route path="/dpf" element={<DPF />} />
           <Route path="/egr" element={<EGR />} />
+          <Route path="/configurator" element={<Configurator />} />
+          <Route path="/configurator/:brandSlug/:modelSlug/:engineSlug" element={<VehicleDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/termeni" element={<Terms />} />
           <Route path="/confidentialitate" element={<Privacy />} />

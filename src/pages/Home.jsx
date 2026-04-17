@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useBooking } from "../components/BookingContext";
 
 const SERVICES = [
@@ -45,6 +46,35 @@ const TRUST = [
 
 export default function Home() {
   const { open } = useBooking();
+  const navigate = useNavigate();
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
+  const [selBrand, setSelBrand] = useState('');
+  const [selModel, setSelModel] = useState('');
+
+  useEffect(() => {
+    fetch('/api/configurator/brands')
+      .then((r) => r.json())
+      .then(setBrands)
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    setModels([]);
+    setSelModel('');
+    if (!selBrand) return;
+    fetch(`/api/configurator/brands/${selBrand}/models`)
+      .then((r) => r.json())
+      .then((d) => setModels(d.models || []))
+      .catch(() => {});
+  }, [selBrand]);
+
+  function goToConfigurator() {
+    const params = new URLSearchParams();
+    if (selBrand) params.set('marca', selBrand);
+    if (selModel) params.set('model', selModel);
+    navigate(`/configurator${params.toString() ? '?' + params.toString() : ''}`);
+  }
 
   return (
     <>
@@ -182,6 +212,60 @@ export default function Home() {
               <p>{t.copy}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      {/* CONFIGURATOR SEARCH */}
+      <section className="section" data-reveal>
+        <div className="section-heading">
+          <span className="eyebrow">Configurator</span>
+          <h2>Cauta specificatiile masinii tale.</h2>
+          <p>
+            Alege marca si modelul pentru a vedea castigul de putere disponibil
+            prin chip tuning Stage 1.
+          </p>
+        </div>
+
+        <div className="home-cfg-bar card">
+          <div className="home-cfg-fields">
+            <div className="cfg-field">
+              <span>Marca</span>
+              <select value={selBrand} onChange={(e) => setSelBrand(e.target.value)}>
+                <option value="">Alege marca</option>
+                {brands.map((b) => (
+                  <option key={b.slug} value={b.slug}>{b.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="cfg-field">
+              <span>Model</span>
+              <select
+                value={selModel}
+                onChange={(e) => setSelModel(e.target.value)}
+                disabled={!selBrand}
+              >
+                <option value="">Alege modelul</option>
+                {models.map((m) => (
+                  <option key={m.slug} value={m.slug}>
+                    {m.name} ({m.years})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="btn btn-primary btn-lg"
+            onClick={goToConfigurator}
+          >
+            Cauta
+          </button>
+        </div>
+
+        <div className="home-cfg-link">
+          <Link to="/configurator" className="card-link">
+            Vezi toate marcile si modelele &rarr;
+          </Link>
         </div>
       </section>
 

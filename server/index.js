@@ -3,11 +3,17 @@ import cors from "cors";
 import { randomUUID } from "crypto";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { readFileSync } from "fs";
 import { insertBooking, getBooking, updateBookingStatus } from "./db.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Load vehicle data for configurator
+const vehiclesData = JSON.parse(
+  readFileSync(join(__dirname, "data/vehicles.json"), "utf-8")
+);
 
 // Service prices (in RON)
 const PRICES = {
@@ -142,6 +148,84 @@ function generatePayUUrl(orderId, amount, service, firstName, lastName, email) {
   // In production, this would be the actual PayU URL with a valid hash
   return `https://secure.payu.ro/order/lu.php?${params.toString()}`;
 }
+
+/* ═══════════════════════════════════════════
+   CONFIGURATOR API
+   ═══════════════════════════════════════════ */
+
+// GET /api/configurator/brands — list all brands (name, slug, logo, model count)
+app.get("/api/configurator/brands", (_req, res) => {
+  const brands = vehiclesData.map((b) => ({
+    name: b.name,
+    slug: b.slug,
+    logo: b.logo,
+    modelCount: b.models.length,
+  }));
+  res.json(brands);
+});
+
+// GET /api/configurator/brands/:brandSlug/models — models for a brand
+app.get("/api/configurator/brands/:brandSlug/models", (req, res) => {
+  const brand = vehiclesData.find((b) => b.slug === req.params.brandSlug);
+  if (!brand) return res.status(404).json({ error: "Marca nu a fost gasita." });
+
+  const models = brand.models.map((m) => ({
+    name: m.name,
+    slug: m.slug,
+    years: m.years,
+    image: m.image,
+    engineCount: m.engines.length,
+  }));
+  res.json({ brand: brand.name, brandSlug: brand.slug, models });
+});
+
+// GET /api/configurator/brands/:brandSlug/models/:modelSlug/engines — engines for a model
+app.get("/api/configurator/brands/:brandSlug/models/:modelSlug/engines", (req, res) => {
+  const brand = vehiclesData.find((b) => b.slug === req.params.brandSlug);
+  if (!brand) return res.status(404).json({ error: "Marca nu a fost gasita." });
+
+  const model = brand.models.find((m) => m.slug === req.params.modelSlug);
+  if (!model) return res.status(404).json({ error: "Modelul nu a fost gasit." });
+
+  const engines = model.engines.map((e) => ({
+    name: e.name,
+    slug: e.slug,
+    fuel: e.fuel,
+    hp: e.hp,
+    nm: e.nm,
+    ecu: e.ecu,
+    stage1: e.stage1,
+    price: e.price,
+  }));
+
+  res.json({
+    brand: brand.name,
+    brandSlug: brand.slug,
+    model: model.name,
+    modelSlug: model.slug,
+    years: model.years,
+    image: model.image,
+    engines,
+  });
+});
+
+// GET /api/configurator/vehicle/:brandSlug/:modelSlug/:engineSlug — full vehicle detail
+app.get("/api/configurator/vehicle/:brandSlug/:modelSlug/:engineSlug", (req, res) => {
+  const brand = vehiclesData.find((b) => b.slug === req.params.brandSlug);
+  if (!brand) return res.status(404).json({ error: "Marca nu a fost gasita." });
+
+  const model = brand.models.find((m) => m.slug === req.params.modelSlug);
+  if (!model) return res.status(404).json({ error: "Modelul nu a fost gasit." });
+
+  const engine = model.engines.find((e) => e.slug === req.params.engineSlug);
+  if (!engine) return res.status(404).json({ error: "Motorizarea nu a fost gasita." });
+
+  res.json({
+    brand: { name: brand.name, slug: brand.slug, logo: brand.logo },
+    model: { name: model.name, slug: model.slug, years: model.years, image: model.image },
+    engine,
+  });
+});
 
 // In production, serve static files
 const distPath = join(__dirname, "../dist");

@@ -3,9 +3,10 @@ import { useBooking } from "./BookingContext";
 import { useState, useEffect } from "react";
 
 const NAV_LINKS = [
-  { to: "/", label: "Acasă" },
+  { to: "/", label: "Acasa" },
   { to: "/tuning", label: "Tuning" },
-  { to: "/diagnoza", label: "Diagnoză" },
+  { to: "/configurator", label: "Configurator" },
+  { to: "/diagnoza", label: "Diagnoza" },
   { to: "/dpf", label: "DPF / FAP" },
   { to: "/egr", label: "EGR" },
   { to: "/contact", label: "Contact" },
